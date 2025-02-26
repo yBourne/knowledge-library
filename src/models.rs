@@ -16,8 +16,8 @@ pub struct Article {
     pub user_id: Uuid,
     pub title: String,
     pub content: String,
-    pub tags: Vec<String>,
-    pub created_at: NaiveDateTime,
+    pub tags: Option<Vec<String>>,
+    pub created_at: Option<NaiveDateTime>,
 }
 
 #[derive(Debug, Deserialize)]
