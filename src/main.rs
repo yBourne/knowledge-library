@@ -1,7 +1,6 @@
-use tokio::net::TcpListener;
-use dotenvy::dotenv;
+use std::net::SocketAddr;
 use hyper::server::Server;
-use tokio_stream::wrappers::TcpListenerStream;
+
 
 mod db;
 mod routes;
@@ -9,16 +8,18 @@ mod models;
 
 #[tokio::main]
 async fn main() {
-    dotenv().ok();
+    dotenvy::dotenv().ok();
     let pool = db::init_db().await;
 
     let app = routes::create_routes().with_state(pool);
-    let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
-
-    // Convert the TcpListener into a Hyper-compatible stream
-    let listener_stream = TcpListenerStream::new(listener);
+    // let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
+    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
 
 
     println!("🚀 Server running on http://localhost:3000");
-    Server::builder(listener_stream).serve(app.into_make_service()).await.unwrap();
+    // Server::builder(listener_stream).serve(app.into_make_service()).await.unwrap();
+    Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
 }
