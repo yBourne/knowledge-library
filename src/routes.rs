@@ -1,4 +1,4 @@
-use axum::{extract::{State, Path}, Json, Router, routing::{get, post}};
+use axum::{extract::State, Json, Router, routing::{get, post}};
 use sqlx::PgPool;
 use serde_json::json;
 use uuid::Uuid;
